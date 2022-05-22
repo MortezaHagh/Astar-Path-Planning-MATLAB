@@ -22,3 +22,6 @@ two mode:  8 and 4 neighbor nodes
 neighbors4: arrange neighbors based on robot direction
 
 neighbors8
+
+
+![srpp-astar2-1](https://user-images.githubusercontent.com/32360441/169691636-c0cc37b4-1818-44d0-b457-5d8df444e137.jpg)
