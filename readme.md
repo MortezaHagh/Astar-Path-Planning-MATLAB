@@ -23,5 +23,6 @@ neighbors4: arrange neighbors based on robot direction
 
 neighbors8
 
-
+![obstacle9](https://user-images.githubusercontent.com/32360441/169779558-273d177a-4dc6-4cc6-b59b-afaf988aa8e6.jpg)
+![obstacles19](https://user-images.githubusercontent.com/32360441/169779563-dfb80fea-d312-406a-aa97-3ee6763243d1.jpg)
 ![srpp-astar2-1](https://user-images.githubusercontent.com/32360441/169691636-c0cc37b4-1818-44d0-b457-5d8df444e137.jpg)
