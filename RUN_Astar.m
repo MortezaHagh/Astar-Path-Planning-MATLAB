@@ -1,54 +1,58 @@
 % A*: Single Robot Path Planning Algorithm - MATLAB
-% By Morteza Haghbeigi, m.haghbeigi@gmail.com
+% Main code for running the algorithm.
+% Morteza Haghbeigi, m.haghbeigi@gmail.com
+
 
 % Initialization
 clc
 clear
 close
 
-%% setting
-model.dist_type = 'manhattan';  % euclidean manhattan;
-model.adj_type='4adj';          % '4adj'  '8adj'
+%% settings
+Model.distType = 'manhattan';  % euclidean manhattan;
+Model.adjType = '4adj';          % '4adj'  '8adj'
 
-%% create model standard
+%% create Map and Model - Using a Map Matrix
 
-% % % create or load Map
-% %[Map, Name] = CreateMap(path_, name_, extension_);
-% [Map, Name] = CreateMap('D:\00-Robotics\02-Robot Path Planning\Methods\Maps', 'warehouse-10-20-10-2-1', '.map');
+% % % create map or load Map
+% %[Map, Name] = createMap(path_, name_, extension_);
+% [Map, Name] = createMap('D:\00-Robotics\02-Robot Path Planning\Methods\Maps', 'warehouse-10-20-10-2-1', '.map');
 % % load(map_name, 'Map');
 % 
 % % create model
-% model = CreateModelFromMap(Map, model);
+% Model = createModelFromMap(Map, Model);
 % 
 % % add robot data to model
-% model = AddRobotToModel(model);
+% Model = addRobotToModel(Model);
 
-%% Create My Model
-model = createModel_Astar(model);
+%% Create Map and Model by User
+Model = createModelAstar(Model);
+% model = createModelObstacles('Obstacle9', model);
 
 %% optimal path by Astar
+% Path: nodeNumbers, coords, dirs
 tic
-[model, path] = myAStar(model);
-sol = path;
-sol.pTime = toc;
-sol.smoothness = smoothness(sol.coords);
-[sol.cost, sol.solChar]= costLinear(model, sol.coords);
+[Model, Path] = myAStar(Model);
+Sol = Path;
+Sol.pTime = toc;
+Sol.smoothness = smoothness(Sol.coords);
+[Sol.cost, Sol.solChar]= costLinear(Model, Sol.coords);
 
 %% modify path
 tic
-mpath = modifyPath (model, path);
-msol = mpath;
-msol.pTime = sol.pTime + toc;
-msol.smoothness = smoothness(msol.coords);
-[msol.cost, msol.solChar] = costLinear(model, msol.coords);
+Mpath = modifyPath (Model, Path);
+Msol = Mpath;
+Msol.pTime = Sol.pTime + toc;
+Msol.smoothness = smoothness(Msol.coords);
+[Msol.cost, Msol.solChar] = costLinear(Model, Msol.coords);
 
 %% # display data and plot solution
-disp(['process time for path= ' num2str(sol.pTime)])
-disp(['process time for mpath= ' num2str(msol.pTime)])
-disp(sol)
+disp(['process time for path= ' num2str(Sol.pTime)])
+disp(['process time for mpath= ' num2str(Msol.pTime)])
+disp(Sol)
 
-plotModel(model)
-plotSolution(sol.coords, msol.coords)
+plotModel(Model)
+plotSolution(Sol.coords, Msol.coords)
 % plotAnimation2(sol.coords)
 
 %% clear temporal data

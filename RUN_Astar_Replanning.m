@@ -1,97 +1,96 @@
 % A* replanning: Single Robot Path Planning Algorithm - MATLAB
 % with remapping in case of new obstacle detection
-% By Morteza Haghbeigi, m.haghbeigi@gmail.com
+% Main code for running the algorithm.
+% Morteza Haghbeigi, m.haghbeigi@gmail.com
 
 % Initialization
 clc
 clear
 close
 
-% adding paths
-addpath('D:\00-Robotics\02-Robot Path Planning\Methods\Astar-Single & Multi-MATLAB')
-addpath('D:\00-Robotics\02-Robot Path Planning\Methods\Astar-Single & Multi-MATLAB\SRPP')
-
 %% setting
-model.dist_type = 'manhattan';  % euclidean manhattan;
-model.adj_type='4adj';          % '4adj'  '8adj'
+Model.distType = 'manhattan';  % euclidean manhattan;
+Model.adjType = '4adj';          % '4adj'  '8adj'
 
-%% create model standard
+%% create Map and Model - Using a Map Matrix
 
 % % % create or load Map
-% %[Map, Name] = CreateMap(path_, name_, extension_);
-% [Map, Name] = CreateMap('D:\00-Robotics\02-Robot Path Planning\Methods\Maps', 'warehouse-10-20-10-2-1', '.map');
+% %[Map, Name] = createMap(path_, name_, extension_);
+% [Map, Name] = createMap('D:\00-Robotics\02-Robot Path Planning\Methods\Maps', 'warehouse-10-20-10-2-1', '.map');
 % % load(map_name, 'Map');
 % 
 % % create model
-% model = CreateModelFromMap(Map, model);
+% Model = createModelFromMap(Map, Model);
 % 
 % % add robot data to model
-% model = AddRobotToModel(model);
+% Model = addRobotToModel(Model);
 
-%% Create My Model
-model = createModel_Astar(model);
+%% Create Map and Model by User
+Model = createModelAstar(Model);
 
-model0 = model;
+Model_init = Model;
 
 %% start timer
 tic
 
 %% pp
 % initial pp t0 (each displacement btween nodes takes 1 sec)
-[model, path] = myAStar(model);
+[Model, Path] = myAStar(Model);
 
 % preallocation
-newobstNode=0;
-sol.nodes = [0];
+newObstNode=0;
+Sol.nodeNumbers = [0];
 
 t=0;
 pt=0;
-while sol.nodes(end)~=model.targetNode
+while Sol.nodeNumbers(end)~=Model.Robot.targetNode
     t=t+1;
     pt=pt+1;
     
     % update model (insert new obstacles)
     if t==5
-        newobstNode(end+1) = 37;
-        model.obstNode(end+1) = 37;
-        model.numOfObs = model.numOfObs+1;
+        newObstNode(end+1) = 37;
+        Model.Obst.x(end+1) = 5;
+        Model.Obst.y(end+1) = 0;
+        Model.Obst.nodeNumber(end+1) = 37;
+        Model.Obst.count = Model.Obst.count+1;
     end
     % check if path replanning is needed
-    if any(path.nodes(pt) == model.obstNode)
-        model.startNode = sol.nodes(end);
-        xy = model.nodes.cord(:, model.startNode);
-        model.xs = xy(1);
-        model.ys = xy(2);
-        dirs = nodes2dirs(sol.nodes, model);
-        model.dir = dirs(end);
-        [model, path] = myAStar(model);
+    if any(Path.nodeNumbers(pt) == Model.Obst.nodeNumber)
+        Model.Robot.startNode = Sol.nodeNumbers(end);
+        xy = Model.Nodes.cord(:, Model.Robot.startNode);
+        Model.xs = xy(1);
+        Model.ys = xy(2);
+        dirs = nodes2dirs(Sol.nodeNumbers, Model);
+        Model.dir = dirs(end);
+        [Model, Path] = myAStar(Model);
         pt=2;
     end
     
     % update final sol
-    sol.nodes(t) = path.nodes(pt);
+    Sol.nodeNumbers(t) = Path.nodeNumbers(pt);
 end
 
 % process time
-sol.pTime = toc;
+Sol.pTime = toc;
 
 % final solution
-sol.coords = nodes2coords(sol.nodes, model);
-sol.dirs = nodes2dirs(sol.nodes, model);
+Sol.coords = nodes2coords(Sol.nodeNumbers, Model);
+Sol.dirs = nodes2dirs(Sol.nodeNumbers, Model);
 
 %% update model and calculate cost
-newobstNode = newobstNode(2:end);
-if numel(newobstNode)>0
-    model0.xc = [model.xc model.nodes.cord(1,newobstNode)];
-    model0.yc = [model.yc model.nodes.cord(2,newobstNode)];
+newObstNode = newObstNode(2:end);
+if numel(newObstNode)>0
+    Model_init.xc = [Model.Obst.x Model.Nodes.cord(1,newObstNode)];
+    Model_init.yc = [Model.Obst.y Model.Nodes.cord(2,newObstNode)];
 end
-[sol.cost, sol.solChar] = costLinear(model0, sol.coords);
+[Sol.cost, Sol.solChar] = costLinear(Model_init, Sol.coords);
 
 %% display data and plot solution
-disp(sol)
+disp(Sol)
 
-plotModel(model0)
-plotSolution(sol.coords,[])
+plotModel(Model)
+plotSolution(Sol.coords,[])
 % plotAnimation2(sol.coords)
 
 %% clear temporal data

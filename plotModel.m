@@ -1,27 +1,27 @@
-function plotModel(model)
+function plotModel(Model)
+% Plot Map and Robots start and target nodes
 
-xmin=model.xmin;
-xmax=model.xmax;
-ymin=model.ymin;
-ymax=model.ymax;
-r=model.obst_r;
-xs=model.xs;
-ys=model.ys;
-xt=model.xt;
-yt=model.yt;
-xc=model.xc;
-yc=model.yc;
+xMin=Model.Map.xMin;
+xMax=Model.Map.xMax;
+yMin=Model.Map.yMin;
+yMax=Model.Map.yMax;
+obstX=Model.Obst.x;
+obstY=Model.Obst.y;
+xs=Model.Robot.xs;
+ys=Model.Robot.ys;
+xt=Model.Robot.xt;
+yt=Model.Robot.yt;
 
 figure(1)
-axis([xmin-1,xmax+1,ymin-1,ymax+1])
+axis([xMin-1,xMax+1,yMin-1,yMax+1])
 axis equal
 grid on
 box on
 hold on
 
 % g=gca;
-% g.XTick=0:xmax;
-% g.YTick=0:ymax;
+% g.XTick=0:xMax;
+% g.YTick=0:yMax;
 
 % start
 plot(xs,ys,'bs','MarkerSize',14,'MarkerEdgeColor',[0.5,0,0.5],...
@@ -37,8 +37,8 @@ plot(xt,yt,'bp','MarkerSize',14,'MarkerEdgeColor',[0,1,1],...
 % end
 
 % Obstacles
-for i=1:length(xc)
-    plot(xc(i),yc(i),'ko', 'MarkerSize',5,'MarkerFaceColor','k');
+for i=1:length(obstX)
+    plot(obstX(i),obstY(i),'ko', 'MarkerSize',5,'MarkerFaceColor','k');
 end
 
 % % Obstacles patch
@@ -48,6 +48,6 @@ end
 % end
 
 % walls
-rectangle('Position',[xmin-0.5 ymin-0.5 (xmax-xmin+1) (ymax-ymin+1)], 'LineWidth',5)
+rectangle('Position',[xMin-0.5 yMin-0.5 (xMax-xMin+1) (yMax-yMin+1)], 'LineWidth',5)
 
 end

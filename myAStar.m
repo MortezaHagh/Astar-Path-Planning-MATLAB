@@ -1,30 +1,31 @@
-function [model, path] = myAStar(model)
-
+function [Model, Path] = myAStar(Model)
+% Astar algorithm
 
 % initialization
-[closed, open, topNode] = initialization_Astar(model);
+[Closed, Open, TopNode] = initializeAstar(Model);
 
 %%%% Start Algorithm
 
-while topNode.node ~= model.targetNode
+while TopNode.nodeNumber ~= Model.Robot.targetNode
     
     % finding neighbors (successors)
-    if strcmp(model.adj_type, '4adj')
-        neighbors=neighbors4(topNode,  closed, model);
-    elseif strcmp(model.adj_type, '8adj')
-        neighbors=neighbors8(topNode,  closed, model);
+    switch Model.adjType
+        case  '4adj'
+            Neighbors=neighbors4(TopNode, Closed, Model);
+        case '8adj'
+            Neighbors=neighbors8(TopNode, Closed, Model);
     end
     
     % update or extend Open list with the successor nodes
-    open = updateOpen(open, neighbors);
+    Open = updateOpen(Open, Neighbors);
     
     % select new Top Node
-    [topNode, open] = selectTopNode(open, model.targetNode, topNode.dir);
-    closed.count = closed.count+1;
-    closed.nodes(closed.count) = topNode.node;
+    [TopNode, Open] = selectTopNode(Open, Model.Robot.targetNode, TopNode.dir);
+    Closed.count = Closed.count+1;
+    Closed.nodeNumber(Closed.count) = TopNode.nodeNumber;
 end
 
 % optimal paths coordinations, nodes, directions
-path = optimalPath(model, open);
+Path = optimalPath(Model, Open);
 
 end

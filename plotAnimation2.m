@@ -1,8 +1,8 @@
-function plotAnimation2(path_coords)
-% animated points with tale! concurrent.
+function plotAnimation2(pathCoords)
+% animate path points with tale! concurrent.
 
-x = path_coords(:,1);
-y = path_coords(:,2);
+x = pathCoords(:,1);
+y = pathCoords(:,2);
 
 Color='g';
 

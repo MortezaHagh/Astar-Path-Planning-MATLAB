@@ -1,31 +1,26 @@
-function model = AddRobotToModel(model)
+function Model = addRobotToModel(Model)
+% add Robot data to Model
 
 
-%% robot
+%% robot data
 % dir: direction , r,l,u,d
-dir = int32('d');
+Robot.dir = double('d');
 
-% start & goal
-% xs = 100;
-% ys = 10;
-% xt = 100;
-% yt = 30;
+% start & goal - start & target coordinates
+% Robot.xs = 0;
+% Robot.ys = 0;
+% Robot.xt = 6;
+% Robot.yt = 7;
+Robot.xs = 6;
+Robot.ys = 2;
+Robot.xt = 40;
+Robot.yt = 20;
 
-xs = 6;
-ys = 2;
-xt = 40;
-yt = 20;
-
-start_node = (ys-model.ymin)*(model.xmax-model.xmin+1)+xs+abs(model.xmin-1);
-target_node = (yt-model.ymin)*(model.xmax-model.xmin+1)+xt+abs(model.xmin-1);
+%  start & goal - node numbers
+Robot.startNode = (Robot.ys-Model.Map.yMin)*(Model.Map.xMax-Model.Map.xMin+1)+Robot.xs+abs(Model.Map.xMin-1);
+Robot.targetNode = (Robot.yt-Model.Map.yMin)*(Model.Map.xMax-Model.Map.xMin+1)+Robot.xt+abs(Model.Map.xMin-1);
 
 %% save model
-model.targetNode = target_node;
-model.startNode = start_node;
-model.dir = dir;
-model.xs = xs;
-model.ys = ys;
-model.xt = xt;
-model.yt = yt;
+Model.Robot = Robot;
 
 end

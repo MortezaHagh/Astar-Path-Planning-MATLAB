@@ -1,16 +1,17 @@
-function plotSolution(path_coords, mpath_coords)
+function plotSolution(pathCoords, mPathCoords)
+% Plot Path and mPath on the Map
 
-x = path_coords(:,1);
-y = path_coords(:,2);
+x = pathCoords(:,1);
+y = pathCoords(:,2);
 
 % path
 plot(x, y, 'b', 'LineWidth', 2);
 plot(x(2:end-1), y(2:end-1), 'bo', 'MarkerFaceColor', 'b');
 
 % modified path
-if ~isempty(mpath_coords)
-    mx = mpath_coords(:,1);
-    my = mpath_coords(:,2);
+if ~isempty(mPathCoords)
+    mx = mPathCoords(:,1);
+    my = mPathCoords(:,2);
     plot(mx, my, 'g');
     plot(mx(2:end-1), my(2:end-1), 'go','MarkerFaceColor','g');
 end

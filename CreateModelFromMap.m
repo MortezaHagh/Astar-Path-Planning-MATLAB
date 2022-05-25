@@ -1,50 +1,47 @@
-function model = CreateModelFromMap(Map, model)
-
-[H,W] = size(Map);
-
-xmin = 1;
-ymin = 1;
-xmax = W;
-ymax = H;
-limArea = max(W, H);
-x_node_num=xmax-xmin+1;
-y_node_num=ymax-ymin+1;
+function Model = createModelFromMap(MapInput, Model)
+% Create model from Map
 
 
-k=1;
-xc=[];
-yc=[];
-obstNode = [];
-nodes_count = H*W;
-nodes.number = zeros(1,nodes_count);
-nodes.cord = zeros(2, nodes_count);
+%% Map Size
+[H,W] = size(MapInput);
+Map.xMin = 1;
+Map.yMin = 1;
+Map.xMax = W;
+Map.yMax = H;
+Map.limArea = max(W, H);
+Map.nX=Map.xMax-Map.xMin+1;
+Map.nY=Map.yMax-Map.yMin+1;
+
+%% Obstacles
+
+Obst.r = 0.25;
+Obst.x=[];
+Obst.y=[];
+Obst.nodeNumber = [];
+Nodes.count = H*W;
+Nodes.cord = zeros(2, Nodes.count);
+Nodes.number = zeros(1,Nodes.count);
+
+iNodeNumber=1;
 for i=1:H
     for j=1:W
-        nodes.number(1,k)=k;
-        nodes.cord(:,k)=[j,i]';
-        if Map(i,j)==0
-            xc=[xc j];
-            yc=[yc i];
-            obstNode = [obstNode k];
+        Nodes.number(1,iNodeNumber)=iNodeNumber;
+        Nodes.cord(:,iNodeNumber)=[j,i]';
+        if MapInput(i,j)==0
+            Obst.x=[Obst.x j];
+            Obst.y=[Obst.y i];
+            Obst.nodeNumber = [Obst.nodeNumber iNodeNumber];
         end
-        k = k+1;
+        iNodeNumber = iNodeNumber+1;
     end
 end
 
+Obst.count = numel(Obst.nodeNumber);
+
 %% save model
-model.x_node_num = x_node_num;
-model.y_node_num = y_node_num;
-model.obstNode = obstNode;
-model.numOfObs=numel(xc);
-model.limArea = limArea;
-model.nodes = nodes;
-model.obst_r = 0.25;
-model.xmin = xmin;
-model.xmax = xmax;
-model.ymin = ymin;
-model.ymax = ymax;
-model.xc = xc;
-model.yc = yc;
+Model.Nodes = Nodes;
+Model.Obst = Obst;
+Model.Map = Map;
 
 % % save
 % model_name = 'model_1';

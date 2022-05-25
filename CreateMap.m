@@ -1,25 +1,24 @@
-function [Map, map_name] = CreateMap(path_, name_, extension_)
-
+function [Map, map_name] = createMap(path_, name_, extension_)
+% read map data given in text format
+% open nodes specified with '.'
 
 map_name = name_;
 
-% readmap data
 deli = '\';
 if strcmp(path, '')
-   deli = ''; 
+    deli = '';
 end
 
 fid = fopen([path_ deli name_ extension_]);
-
 fgetl(fid);
 
-% H
+% Height
 tline = fgetl(fid);
 H = tline;
 H = regexp(H,'\d*','Match');
 H = str2num(H{1});
 
-%W
+% Width
 tline = fgetl(fid);
 W = tline;
 W = regexp(W,'\d*','Match');
@@ -28,24 +27,27 @@ W = str2num(W{1});
 %
 fgetl(fid);
 
-% map_cell
-i=1;
-map_cell = cell(H,1);
+% mapCell
+% read each line from file and put it in mapCell
+iLine=1;
+mapCell = cell(H,1);
 tline = fgetl(fid);
 while ischar(tline)
-    map_cell{i,1} =  tline;
+    mapCell{iLine,1} =  tline;
     tline = fgetl(fid);
-    i = i+1;
+    iLine = iLine+1;
 end
 fclose(fid);
 
-map_cell = flip(map_cell);
+% flip mapCell
+mapCell = flip(mapCell);
 
-% Map matrix
+% Map Matrix
+% Detect Obstacles and Free Nodes
 Map = zeros(H, W);
-for i=1:H
+for iLine=1:H
     for j=1:W
-        Map(i,j) =  strcmp(map_cell{i,1}(j), '.');
+        Map(iLine,j) =  strcmp(mapCell{iLine,1}(j), '.');
     end
 end
 

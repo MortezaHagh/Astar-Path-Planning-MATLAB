@@ -1,24 +1,25 @@
-function path = optimalPath(model, open)
-
+function Path = optimalPath(Model, Open)
+% find optimal path nodes from target to start after Astar returns
+% Path: nodeNumbers, coords, dirs
 
 % starting from the last (target) node
-path_nodes(1) = model.targetNode;
+pathNodes(1) = Model.Robot.targetNode;
 i=2;
 
 % Traverse Open and determine the parent nodes
-parent_ind = [open.list.node]==path_nodes(1);
-parent_node = open.list(parent_ind).pnode;
+indParent = [Open.List.nodeNumber]==pathNodes(1);
+parentNodeNumber = Open.List(indParent).pNode;
 
 % going back to start node
-while parent_node ~= model.startNode
-    path_nodes(i) = parent_node;
-    parent_ind = [open.list.node]==parent_node;
-    parent_node =open.list(parent_ind).pnode;
+while parentNodeNumber ~= Model.Robot.startNode
+    pathNodes(i) = parentNodeNumber;
+    indParent = [Open.List.nodeNumber]==parentNodeNumber;
+    parentNodeNumber =Open.List(indParent).pNode;
     i=i+1;
 end
 
-path.nodes = [model.startNode, flip(path_nodes)];
-path.coords = nodes2coords(path.nodes, model);
-path.dirs = nodes2dirs(path.nodes, model);
+Path.nodeNumbers = [Model.Robot.startNode, flip(pathNodes)];
+Path.coords = nodes2coords(Path.nodeNumbers, Model);
+Path.dirs = nodes2dirs(Path.nodeNumbers, Model);
 
 end

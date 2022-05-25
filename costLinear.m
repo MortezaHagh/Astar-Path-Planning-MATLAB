@@ -1,4 +1,4 @@
-function [cost, solChar] = costLinear(model, coords)
+function [cost, SolChar] = costLinear(Model, coords)
 
 xPath = coords(:,1);
 yPath = coords(:,2);
@@ -23,20 +23,20 @@ xx = xx(:); xx = xx';
 yy = yy(:,1:end-1)';
 yy = yy(:); yy = yy';
 
-violation = zeros(1,model.numOfObs);
-for i = 1:model.numOfObs
-    d = sqrt((xx - model.xc(i)).^2 + (yy - model.yc(i)).^2);
-    v = max(1 - d/(model.obst_r), 0);
+violation = zeros(1,Model.Obst.count);
+for i = 1:Model.Obst.count
+    d = sqrt((xx - Model.Obst.x(i)).^2 + (yy - Model.Obst.y(i)).^2);
+    v = max(1 - d/(Model.Obst.r), 0);
     violation(i) = mean(v);
 end
 violation = mean(violation);
 
 % solution characteristics
 beta = 10e10;
-solChar.path_length = L;
-solChar.violation = violation;
-solChar.isFeasible = (violation == 0);
+SolChar.pathLength = L;
+SolChar.violation = violation;
+SolChar.isFeasible = (violation == 0);
 
-cost = solChar.path_length  + beta*solChar.violation ;
+cost = SolChar.pathLength  + beta*SolChar.violation ;
 
 end
