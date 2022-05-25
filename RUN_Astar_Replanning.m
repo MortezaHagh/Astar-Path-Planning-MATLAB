@@ -26,7 +26,7 @@ Model.adjType = '4adj';          % '4adj'  '8adj'
 % Model = addRobotToModel(Model);
 
 %% Create Map and Model by User
-Model = createModelAstar(Model);
+Model = createModelBase(Model);
 
 Model_init = Model;
 

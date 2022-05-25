@@ -1,4 +1,4 @@
-function Model=createModelAstar(Model)
+function Model=createModelBase(Model)
 % Create Complete Model - Base function for Astar
 
 disp('Create Complete Model - Astar');
