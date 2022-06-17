@@ -1,15 +1,9 @@
-function [Map, map_name] = createMap(path_, name_, extension_)
+function Map = createMap(path)
 % read map data given in text format
 % open nodes specified with '.'
 
-map_name = name_;
 
-deli = '\';
-if strcmp(path, '')
-    deli = '';
-end
-
-fid = fopen([path_ deli name_ extension_]);
+fid = fopen(path);
 fgetl(fid);
 
 % Height
@@ -43,7 +37,7 @@ fclose(fid);
 mapCell = flip(mapCell);
 
 % Map Matrix
-% Detect Obstacles and Free Nodes
+% Detect Obstacles and Free Nodes (1:Free, 0:Obstacle)
 Map = zeros(H, W);
 for iLine=1:H
     for j=1:W

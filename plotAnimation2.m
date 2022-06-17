@@ -6,7 +6,7 @@ y = pathCoords(:,2);
 
 Color='g';
 
-h1=plot(x(1), y(1), 'o', 'MarkerFaceColor', Color, 'MarkerEdgeColor', Color(1,:));
+h1=plot(x(1), y(1), 'o', 'MarkerFaceColor', Color, 'MarkerEdgeColor', Color(1,:),'MarkerSize',4);
 h2=plot(x(1:2), y(1:2), 'Color', Color,'LineWidth', 2);
 pause(0.2)
 

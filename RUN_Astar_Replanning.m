@@ -9,19 +9,16 @@ clear
 close
 
 %% setting
-Model.distType = 'manhattan';  % euclidean manhattan;
-Model.adjType = '4adj';          % '4adj'  '8adj'
+Model.expandMethod = 'heading';     % random heading, tiebreaking
+Model.distType = 'manhattan';       % euclidean manhattan;
+Model.adjType='4adj';               % '4adj'  '8adj'
 
-%% create Map and Model - Using a Map Matrix
+%% create Map and Model - loading a Map Matrix
 
-% % % create or load Map
-% %[Map, Name] = createMap(path_, name_, extension_);
-% [Map, Name] = createMap('D:\00-Robotics\02-Robot Path Planning\Methods\Maps', 'warehouse-10-20-10-2-1', '.map');
-% % load(map_name, 'Map');
-% 
-% % create model
+% % load Map and create model - (1:free, o:obstacles)
+%  load(map_name, 'Map');
 % Model = createModelFromMap(Map, Model);
-% 
+
 % % add robot data to model
 % Model = addRobotToModel(Model);
 
@@ -84,14 +81,14 @@ if numel(newObstNode)>0
     Model_init.xc = [Model.Obst.x Model.Nodes.cord(1,newObstNode)];
     Model_init.yc = [Model.Obst.y Model.Nodes.cord(2,newObstNode)];
 end
-[Sol.cost, Sol.solChar] = costLinear(Model_init, Sol.coords);
+Sol.cost = costL(Sol.coords);
 
 %% display data and plot solution
 disp(Sol)
 
 plotModel(Model)
 plotSolution(Sol.coords,[])
-% plotAnimation2(sol.coords)
+% plotAnimation2(Sol.coords)
 
 %% clear temporal data
 clear xy t pt dirs newobstNode adj_type dist_type

@@ -7,33 +7,30 @@ currentDir = TopNode.dir;
 currentX = curentXY(1);
 currentY = curentXY(2);
 
-% prioritize expanding based on direction
-% q# = [dx1 dy1; ...]
-q=[1 0 double('r'); 0 1 double('u'); 0 -1 double('d'); -1 0 double('l')];
-q1=q([1,2,3,4],:); % r
-q2=q([4,2,3,1],:); % l
-q3=q([2,1,4,3],:); % u
-q4=q([3,1,4,2],:); % d
-
-switch currentDir
-    case int32('r')
-        qs=q1;
-    case int32('l')
-        qs=q2;
-    case int32('u')
-        qs=q3;
-    case int32('d')
-        qs=q4;
+% prioritize expanding based on direction or random
+dxy=[1 0; 0 1; 0 -1; -1 0];
+nodeHeadingD = [0 90 270 180];
+switch Model.expandMethod
+    case 'heading'
+        nodeHeadingR = deg2rad(nodeHeadingD);
+        dTheta = rad2deg(angdiff(currentDir*ones(1, numel(nodeHeadingR)), nodeHeadingR));
+        [~, sortInd] = sort(abs(dTheta));
+        dxy = dxy(sortInd,:);
+        nodeHeadingD = nodeHeadingD(sortInd);
+    case 'random'
+        randInd = randperm(numel(nodeHeadingD));
+        dxy = dxy(randInd, :);
+        nodeHeadingD = nodeHeadingD(randInd);
 end
 
 nNeighbors=0;
 for iNeighbor=1:4
     % new node
-    ix=qs(iNeighbor,1);
-    iy=qs(iNeighbor,2);
+    ix=dxy(iNeighbor,1);
+    iy=dxy(iNeighbor,2);
     newX = currentX+ix;
     newY = currentY+iy;
-    newDir = qs(iNeighbor,3);
+    newDir = nodeHeadingD(iNeighbor);
     
     % check if the new node is within limits
     if((newX>=Model.Map.xMin && newX<=Model.Map.xMax) && ...

@@ -8,7 +8,7 @@ Map.xMin = 1;
 Map.yMin = 1;
 Map.xMax = W;
 Map.yMax = H;
-Map.limArea = max(W, H);
+Map.lim = max(W, H);
 Map.nX=Map.xMax-Map.xMin+1;
 Map.nY=Map.yMax-Map.yMin+1;
 

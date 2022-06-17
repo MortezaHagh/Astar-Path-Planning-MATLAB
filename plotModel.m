@@ -15,7 +15,6 @@ yt=Model.Robot.yt;
 figure(1)
 axis([xMin-1,xMax+1,yMin-1,yMax+1])
 axis equal
-grid on
 box on
 hold on
 

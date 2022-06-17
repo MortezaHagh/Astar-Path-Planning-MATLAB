@@ -4,19 +4,19 @@ function Model=createModelBase(Model)
 disp('Create Complete Model - Astar');
 
 %% Map Size
-Map.Lim = 28;
+Map.lim = 28;
 Map.xMin = -1;
-Map.xMax = Map.Lim;
+Map.xMax = Map.lim;
 Map.yMin = -1;
-Map.yMax = Map.Lim;
+Map.yMax = Map.lim;
 
 Map.nX=Map.xMax-Map.xMin+1;
 Map.nY=Map.yMax-Map.yMin+1;
 
 %% robot data
 
-% dir: direction , r,l,u,d
-Robot.dir = double('d');
+% dir: direction
+Robot.dir = 90; %randsample([0 90 180 270], 1);
 
 % start & goal - start & target coordinates
 Robot.xs = 0;
@@ -53,20 +53,17 @@ Obst.count = length(Obst.x);
 
 % obstacle node numbers
 Obst.number = zeros(1,Obst.count);
-for i = 1:Obst.count
-    Obst.nodeNumber(i) = (Obst.y(i)-Map.yMin)*(Map.xMax-Map.xMin+1)+Obst.x(i)+abs(Map.xMin-1);
+for ix = 1:Obst.count
+    Obst.nodeNumber(ix) = (Obst.y(ix)-Map.yMin)*(Map.xMax-Map.xMin+1)+Obst.x(ix)+abs(Map.xMin-1);
 end
 
 %% nodes & adj data
 iNode = 0;
-Adj = cell(1,1);
-for j = Map.yMin:Map.yMax
-    for i = Map.xMin:Map.xMax
+for iy = Map.yMin:Map.yMax
+    for ix = Map.xMin:Map.xMax
         iNode = iNode+1;
-        Adj{iNode,1} = iNode;             % node number
-        Adj{iNode,2} = [i, j];            % node coordinates
         Nodes.number(1, iNode) = iNode;   % node number
-        Nodes.cord(1:2, iNode) = [i, j]'; % node coordinates
+        Nodes.cord(1:2, iNode) = [ix, iy]'; % node coordinates
     end
 end
 Nodes.count = iNode;
@@ -75,7 +72,6 @@ Nodes.count = iNode;
 Model.Nodes = Nodes;
 Model.Robot = Robot;
 Model.Obst = Obst;
-Model.Adj = Adj;
 Model.Map = Map;
 
 %% plot model

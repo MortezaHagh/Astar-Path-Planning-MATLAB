@@ -5,9 +5,9 @@ function neighbors = neighbors8(TopNode, Closed, Model)
 curentXY = Model.Nodes.cord(:,TopNode.nodeNumber);
 currentX = curentXY(1);
 currentY = curentXY(2);
+currentDir = deg2rad(TopNode.dir);
 
-newDir = double('n');
-
+dirList=[];
 nNeighbors=0;
 for ix= 1:-1:-1
     for iy= 1:-1:-1
@@ -17,6 +17,9 @@ for ix= 1:-1:-1
             %(i==0 || j==0)  % eliminate corner nodes -> 4 node
             newX = currentX +ix;
             newY = currentY +iy;
+            nodeHeading = atan2(iy, ix);
+            newDir = rad2deg(nodeHeading);
+            
             
             % check if the new node is within limits
             if((newX>=Model.Map.xMin && newX<=Model.Map.xMax) && ...
@@ -33,6 +36,8 @@ for ix= 1:-1:-1
                     hCost = Distance(Model.Robot.xt, Model.Robot.yt, newX, newY, Model.distType);
                     list(nNeighbors).fCost = list(nNeighbors).gCost + hCost;
                     list(nNeighbors).dir = newDir;
+                    
+                    dirList = [dirList nodeHeading];
                 end
             end
         end
@@ -41,7 +46,15 @@ end
 
 neighbors.count=nNeighbors;
 if nNeighbors~=0
-    neighbors.List = list;
+    switch Model.expandMethod
+        case 'heading'
+            dTheta = abs(angdiff(currentDir*ones(1,numel(dirList)), dirList));
+            [~, sortInd] = sort(dTheta);
+            neighbors.List = list(sortInd);
+        case 'random'
+            randInd = randperm(numel(dirList));
+            neighbors.List = list(randInd);
+    end
 else
     neighbors.List= [];
 end
