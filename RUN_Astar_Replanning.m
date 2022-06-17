@@ -9,9 +9,9 @@ clear
 close
 
 %% setting
-Model.expandMethod = 'heading';     % random heading, tiebreaking
-Model.distType = 'manhattan';       % euclidean manhattan;
-Model.adjType='4adj';               % '4adj'  '8adj'
+Model.expandMethod = 'heading';  % random or heading
+Model.distType = 'manhattan';    % euclidean or manhattan;
+Model.adjType = '4adj';          % 4adj or 8adj
 
 %% create Map and Model - loading a Map Matrix
 
